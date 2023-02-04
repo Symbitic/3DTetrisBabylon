@@ -1,26 +1,22 @@
 {
-    "name": "babylonjs101",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "dependencies": {
-        "babylonjs": "^4.0.3",
-        "babylonjs-gui": "^4.0.3",
-        "gulp": "^4.0.2",
-        "gulp-webserver": "^0.9.1"
-    },
-    "devDependencies": {},
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/deltakosh/babylonjs101.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/deltakosh/babylonjs101/issues"
-    },
-    "homepage": "https://github.com/deltakosh/babylonjs101#readme"
+  "name": "3d-tetris-babylon",
+  "private": true,
+  "version": "1.0.0",
+  "description": "3D Tetris by Anna Jo and RJ",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build --base /3DTetrisBabylon/",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^5.45.0",
+    "@babylonjs/gui": "^5.45.0",
+    "@babylonjs/inspector": "^5.45.0",
+    "@babylonjs/materials": "^5.45.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1"
+  }
 }

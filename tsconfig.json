@@ -1,19 +1,19 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-      "noResolve": true,
-      "target": "es5",
-      "declaration": false,
-      "experimentalDecorators": true,
-      "isolatedModules": false,
-      "sourceMap": true,
-      "types": [
-        "babylonjs",
-        "babylonjs-gui"
-      ],
-      "lib": [
-          "dom",
-          "es5"
-      ]
-    }
-  }
+  "compilerOptions": {
+    "target": "es2022",
+    "useDefineForClassFields": true,
+    "module": "es2022",
+    "lib": ["es2022", "dom"],
+    "moduleResolution": "node",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
