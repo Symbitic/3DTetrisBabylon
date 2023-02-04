@@ -154,6 +154,7 @@ node_modules
 
 # for VSCode
 .vs
+.vscode
 .tempChromeProfileForDebug
 .temp
 *.js.map
