@@ -171,7 +171,6 @@ node_modules
 # local dev
 localDev/src/*
 /localDev/src/index.js
-package-lock.json
 
 # Vite output
 dist
