@@ -7,9 +7,9 @@ import {
     Scene,
     Vector3,
 } from "@babylonjs/core";
-import { Menu } from "./Menu";
-import { Game } from "./Game";
-import { GameOver } from "./GameOver";
+import { Menu } from "./menu";
+import { Game } from "./game";
+import { GameOver } from "./gameover";
 
 class App {
     private _scene: Scene;

@@ -10,7 +10,7 @@ import { MiniL } from "./Blocks/MiniL";
 import { ShortTower } from "./Blocks/ShortTower";
 import { TBlock } from "./Blocks/TBlock";
 import { ZBlock } from "./Blocks/ZBlock";
-import { GameBoard } from "./GameBoard";
+import { GameBoard } from "./gameboard";
 
 export class Game {
     public gameBoard: GameBoard;
