@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --base /3d-tetris/",
+    "build": "vite build --base /3d-tetris/",
+    "prebuild": "tsc",
     "preview": "vite preview"
   },
   "dependencies": {
