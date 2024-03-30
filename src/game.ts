@@ -26,7 +26,7 @@ export class Game {
     scene: Scene;
     gameOver: boolean;
     scoreCount: number; // Whenever a layer cleared = 49 pts (7x7)
-    private _landed: Mesh[]; // Landed (inactive) blocks stored as cubes (uncoupled); if collided -> space = true
+    private _landed: Mesh[] = []; // Landed (inactive) blocks stored as cubes (uncoupled); if collided -> space = true
     private _rotation: number;
     private _score: TextBlock;
 
@@ -35,7 +35,6 @@ export class Game {
         this.gameBoard = new GameBoard(size, scene); //7 or 5
         this.collided = false;
         this.enableControls();
-        this._landed = new Array();
         this._rotation = Math.PI / 2;
         this.gameOver = false;
         this.scoreCount = 0;
@@ -61,8 +60,8 @@ export class Game {
             }
             if (this.collided) {
                 clearInterval(this.fallingInterval);
-                this.setLanded();
-                this.checkFullLayer();
+                this._setLanded();
+                this._checkFullLayer();
 
                 if (!this.isGameOver()) {
                     this.collided = false;
@@ -111,25 +110,25 @@ export class Game {
 
         this.fallingInterval = setInterval(() => {
             if (
-                this.gameBoard.inGrid(this.block.getPositions()) === false &&
-                this.gameBoard.canMove(this.inGridPositions(), "down") === false
+                !this.gameBoard.inGrid(this.block.getPositions()) &&
+                !this.gameBoard.canMove(this.inGridPositions(), "down")
             ) {
                 this.gameOver = true;
+                return;
             }
-            if (this.gameBoard.inGrid(this.block.getPositions()) === false) {
+            if (!this.gameBoard.inGrid(this.block.getPositions())) {
                 // For when block first spawned
                 this.fixRotationOffset();
                 this.block.position.y -= 1;
             } else if (
                 this.gameBoard.inGrid(this.block.getPositions()) &&
-                this.gameBoard.canMove(this.block.getPositions(), "down") ===
-                    false
+                !this.gameBoard.canMove(this.block.getPositions(), "down")
             ) {
                 this.collided = true;
             } else if (
                 this.gameBoard.inGrid(this.block.getPositions()) &&
-                this.checkCollision() === false &&
-                this.gameBoard.canMove(this.block.getPositions(), "down")
+                this.gameBoard.canMove(this.block.getPositions(), "down") &&
+                this.checkCollision() === false
             ) {
                 this.block.position.y -= 1;
                 this.fixRotationOffset();
@@ -180,23 +179,19 @@ export class Game {
     private checkCollision() {
         // either y = 11 (ground lvl)(height -1), or block right on top of another mesh (y+1 -> space = true)
         const groundlvl = this.gameBoard.groundlvl;
-        let groundtrack = 0;
 
         for (let i = 0; i < this.block.getPositions().length; i++) {
             if (this.block.getPositions()[i].y === groundlvl) {
-                groundtrack++;
+                this.collided = true;
+                return true;
             }
         }
 
-        if (groundtrack > 0) {
-            this.collided = true;
-            return true;
-        }
         return false;
     }
 
     // Store cubes into landed array
-    private setLanded(): void {
+    private _setLanded() {
         // MUST HAVE - IMPORTANT - without it landed array contains unrounded off decimals (from rotations)
         this.block.uncouple();
         this.block.parentCube.computeWorldMatrix();
@@ -225,7 +220,7 @@ export class Game {
     }
 
     // Check for any filled up layer, not just for bottom layer
-    private checkFullLayer(): void {
+    private _checkFullLayer() {
         const height = this.gameBoard.height;
         const size = this.gameBoard.size;
 

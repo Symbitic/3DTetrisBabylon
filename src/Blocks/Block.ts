@@ -10,7 +10,7 @@ export class Block {
     positions: Vector3[];
     parentCube!: Mesh;
     cubes: Mesh[]; // Child cubes - for uncoupling/recoupling
-    type!: string; // Type or name of block
+    type!: string;
     scene: Scene;
     private _isActive: boolean;
 
@@ -19,13 +19,13 @@ export class Block {
         // or false if block not in grid (when first being spawned), true if in grid and falling
         this._isActive = true;
         this.positions = new Array(cubeNum);
-        this.cubes = new Array(cubeNum - 1); //excluding parent cube
+        this.cubes = new Array(cubeNum - 1); // excluding parent cube
         this.scene = scene;
     }
 
     createCube(ypos: number, xpos: number): Mesh {
-        let cube = MeshBuilder.CreateBox("box", { size: 1 }, this.scene); //will scene need to be stored?
-        cube.position.y = ypos; //5.5 or 6.5?, or higher, above grid?
+        let cube = MeshBuilder.CreateBox("box", { size: 1 }, this.scene); // will scene need to be stored?
+        cube.position.y = ypos; // 5.5 or 6.5?, or higher, above grid?
         cube.position.x = xpos;
         cube = this.createEdges(cube);
 

@@ -196,8 +196,8 @@ export class GameBoard {
 
     // To compare potential position of block
     canMove(blockpos: Vector3[], dir: string) {
-        //to see if block can move or not (in a certain direction) - can it move to potential space?
-        //dir: left - x -= 1, right - x += 1, forward - z += 1, backward - z -= 1, down - y -= 1
+        // to see if block can move or not (in a certain direction) - can it move to potential space?
+        // dir: left - x -= 1, right - x += 1, forward - z += 1, backward - z -= 1, down - y -= 1
 
         const potential = JSON.parse(JSON.stringify(blockpos));
 
