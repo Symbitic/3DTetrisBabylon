@@ -13,6 +13,7 @@ import { GameOver } from "./gameover.js";
 
 import "@babylonjs/core/Helpers/sceneHelpers.js";
 import "@babylonjs/core/Materials/standardMaterial.js";
+import "@babylonjs/core/Rendering/edgesRenderer.js";
 
 class App {
     private _scene: Scene;
