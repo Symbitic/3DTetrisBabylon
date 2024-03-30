@@ -1,29 +1,34 @@
-import { KeyboardEventTypes, Mesh, Scene, Vector3 } from "@babylonjs/core";
-import { AdvancedDynamicTexture, Control, TextBlock } from "@babylonjs/gui";
+import { AdvancedDynamicTexture } from "@babylonjs/gui";
+import { Control } from "@babylonjs/gui";
+import { KeyboardEventTypes } from "@babylonjs/core/Events/keyboardEvents.js";
+import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { TextBlock } from "@babylonjs/gui";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector.js";
 
-import { BigCube } from "./Blocks/BigCube";
-import { BigL } from "./Blocks/BigL";
-import { BigTower } from "./Blocks/BigTower";
-import { Block } from "./Blocks/Block";
-import { Cube } from "./Blocks/Cube";
-import { MiniL } from "./Blocks/MiniL";
-import { ShortTower } from "./Blocks/ShortTower";
-import { TBlock } from "./Blocks/TBlock";
-import { ZBlock } from "./Blocks/ZBlock";
-import { GameBoard } from "./gameboard";
+import { BigCube } from "./Blocks/BigCube.js";
+import { BigL } from "./Blocks/BigL.js";
+import { BigTower } from "./Blocks/BigTower.js";
+import { Block } from "./Blocks/Block.js";
+import { Cube } from "./Blocks/Cube.js";
+import { MiniL } from "./Blocks/MiniL.js";
+import { ShortTower } from "./Blocks/ShortTower.js";
+import { TBlock } from "./Blocks/TBlock.js";
+import { ZBlock } from "./Blocks/ZBlock.js";
+import { GameBoard } from "./gameboard.js";
 
 export class Game {
-    public gameBoard: GameBoard;
-    public block!: Block; // Stores current active block
-    public collided: boolean;
-    public colpt!: Vector3;
+    gameBoard: GameBoard;
+    block!: Block; // Stores current active block
+    collided: boolean;
+    colpt!: Vector3;
+    fallingInterval: any;
+    scene: Scene;
+    gameOver: boolean;
+    scoreCount: number; // Whenever a layer cleared = 49 pts (7x7)
     private _landed: Mesh[]; // Landed (inactive) blocks stored as cubes (uncoupled); if collided -> space = true
     private _rotation: number;
-    public fallingInterval: any;
-    public scene: Scene;
-    public gameOver: boolean;
     private _score: TextBlock;
-    public scoreCount: number; // Whenever a layer cleared = 49 pts (7x7)
 
     constructor(size: number, scene: Scene) {
         this.scene = scene;
@@ -40,7 +45,8 @@ export class Game {
         this._score.fontFamily = "Agency FB";
         this._score.color = "white";
         this._score.fontSize = 50;
-        this._score.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        this._score.textHorizontalAlignment =
+            Control.HORIZONTAL_ALIGNMENT_RIGHT;
         this._score.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
         this._score.left = -20;
         this._score.top = 20;
@@ -104,22 +110,36 @@ export class Game {
         this.checkCollision();
 
         this.fallingInterval = setInterval(() => {
-            if (this.gameBoard.inGrid(this.block.getPositions()) === false && this.gameBoard.canMove(this.inGridPositions(), "down") === false) {
+            if (
+                this.gameBoard.inGrid(this.block.getPositions()) === false &&
+                this.gameBoard.canMove(this.inGridPositions(), "down") === false
+            ) {
                 this.gameOver = true;
             }
             if (this.gameBoard.inGrid(this.block.getPositions()) === false) {
                 // For when block first spawned
                 this.fixRotationOffset();
                 this.block.position.y -= 1;
-            } else if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down") === false) {
+            } else if (
+                this.gameBoard.inGrid(this.block.getPositions()) &&
+                this.gameBoard.canMove(this.block.getPositions(), "down") ===
+                    false
+            ) {
                 this.collided = true;
-            } else if (this.gameBoard.inGrid(this.block.getPositions()) && this.checkCollision() === false && this.gameBoard.canMove(this.block.getPositions(), "down")) {
+            } else if (
+                this.gameBoard.inGrid(this.block.getPositions()) &&
+                this.checkCollision() === false &&
+                this.gameBoard.canMove(this.block.getPositions(), "down")
+            ) {
                 this.block.position.y -= 1;
                 this.fixRotationOffset();
-                this.gameBoard.updateSpaces(this.block.getPositions(), true, false);
+                this.gameBoard.updateSpaces(
+                    this.block.getPositions(),
+                    true,
+                    false,
+                );
             }
         }, 1250);
-
     }
 
     // Get positions in the grid - for falling interval
@@ -198,7 +218,7 @@ export class Game {
         // Store landed block's positions to updateSpaces
         const arr = new Array();
         for (let el = 0; el < this._landed.length; el++) {
-            arr.push(this._landed[el].position);  // abs pos?
+            arr.push(this._landed[el].position); // abs pos?
         }
 
         this.gameBoard.updateSpaces(arr, false, true);
@@ -221,7 +241,8 @@ export class Game {
                     if (this.gameBoard.spaces[x][y][z] === false) {
                         fullLayer = false;
                     } else {
-                        layerheight = (this.gameBoard.positions as any)[x][y][z].y;
+                        layerheight = (this.gameBoard.positions as any)[x][y][z]
+                            .y;
                     }
                 }
             }
@@ -282,13 +303,18 @@ export class Game {
         for (y; y >= 0; y--) {
             for (let x = 0; x < size; x++) {
                 for (let z = 0; z < size; z++) {
-
                     for (let i = 0; i < landedPos.length; i++) {
                         // See if position in landed same as in position arr in gameboard - should only find 1 match at this xyz
-                        if (this.gameBoard.compare(landedPos[i], x, y, z) === true) {
+                        if (
+                            this.gameBoard.compare(landedPos[i], x, y, z) ===
+                            true
+                        ) {
                             layer = y + 1;
 
-                            while (layer < height && this.gameBoard.spaces[x][layer][z] === false) {
+                            while (
+                                layer < height &&
+                                this.gameBoard.spaces[x][layer][z] === false
+                            ) {
                                 landedPos[i].y--;
                                 layer++;
                             }
@@ -308,35 +334,68 @@ export class Game {
                 this.checkCollision(); //&& this.gameBoard.inGrid(this.block.getPositions())
             }
             //keyboard actions
-            if (!this.collided && !this.gameOver) { //when block 1st drawn, outside of grid (!inGrid), can only rotate
+            if (!this.collided && !this.gameOver) {
+                //when block 1st drawn, outside of grid (!inGrid), can only rotate
                 this.fixRotationOffset();
                 switch (kbInfo.type) {
                     case KeyboardEventTypes.KEYDOWN:
                         switch (kbInfo.event.key) {
                             case "w":
                                 // Forward
-                                if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "forward")) {
+                                if (
+                                    this.gameBoard.inGrid(
+                                        this.block.getPositions(),
+                                    ) &&
+                                    this.gameBoard.canMove(
+                                        this.block.getPositions(),
+                                        "forward",
+                                    )
+                                ) {
                                     this.block.position.z += 1;
                                 }
                                 break;
 
                             case "s":
                                 // Backward
-                                if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "back")) {
+                                if (
+                                    this.gameBoard.inGrid(
+                                        this.block.getPositions(),
+                                    ) &&
+                                    this.gameBoard.canMove(
+                                        this.block.getPositions(),
+                                        "back",
+                                    )
+                                ) {
                                     this.block.position.z -= 1;
                                 }
                                 break;
 
                             case "a":
                                 // Left
-                                if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "left")) {
+                                if (
+                                    this.gameBoard.inGrid(
+                                        this.block.getPositions(),
+                                    ) &&
+                                    this.gameBoard.canMove(
+                                        this.block.getPositions(),
+                                        "left",
+                                    )
+                                ) {
                                     this.block.position.x -= 1;
                                 }
                                 break;
 
                             case "d":
                                 // Right
-                                if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "right")) {
+                                if (
+                                    this.gameBoard.inGrid(
+                                        this.block.getPositions(),
+                                    ) &&
+                                    this.gameBoard.canMove(
+                                        this.block.getPositions(),
+                                        "right",
+                                    )
+                                ) {
                                     this.block.position.x += 1;
                                 }
                                 break;
@@ -344,9 +403,25 @@ export class Game {
                             case " ":
                                 // Down
                                 //TO FIX: press space bar continuously - canMove not called fast enough, meshes intersect
-                                if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down")) {
+                                if (
+                                    this.gameBoard.inGrid(
+                                        this.block.getPositions(),
+                                    ) &&
+                                    this.gameBoard.canMove(
+                                        this.block.getPositions(),
+                                        "down",
+                                    )
+                                ) {
                                     this.block.position.y -= 1;
-                                } else if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down") === false) {
+                                } else if (
+                                    this.gameBoard.inGrid(
+                                        this.block.getPositions(),
+                                    ) &&
+                                    this.gameBoard.canMove(
+                                        this.block.getPositions(),
+                                        "down",
+                                    ) === false
+                                ) {
                                     this.collided = true;
                                 }
                                 break;
@@ -368,7 +443,11 @@ export class Game {
                         }
 
                         this.fixRotationOffset();
-                        this.gameBoard.updateSpaces(this.block.getPositions(), true, false);
+                        this.gameBoard.updateSpaces(
+                            this.block.getPositions(),
+                            true,
+                            false,
+                        );
                         break;
                 }
             }
@@ -382,7 +461,7 @@ export class Game {
     isGameOver() {
         const size = this.gameBoard.size;
         const height = this.gameBoard.height;
-        const top = (height / 2) - 0.5;
+        const top = height / 2 - 0.5;
 
         //array of positions of block that just spawned
         const spawnPos: Vector3[] = this.block.getPositions();
@@ -394,8 +473,13 @@ export class Game {
         const posBelow: Vector3[] = new Array();
 
         for (let i = 0; i < clonedPos.length; i++) {
-            if (clonedPos[i].y === top) { // top + 1
-                const vector = new Vector3(clonedPos[i].x, clonedPos[i].y - 1, clonedPos[i].z);
+            if (clonedPos[i].y === top) {
+                // top + 1
+                const vector = new Vector3(
+                    clonedPos[i].x,
+                    clonedPos[i].y - 1,
+                    clonedPos[i].z,
+                );
                 posBelow.push(vector);
             }
         }
@@ -406,7 +490,6 @@ export class Game {
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < height; y++) {
                 for (let z = 0; z < size; z++) {
-
                     for (let i = 0; i < posBelow.length; i++) {
                         if (this.gameBoard.compare(posBelow[i], x, y, z)) {
                             if (this.gameBoard.spaces[x][y][z] === true) {

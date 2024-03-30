@@ -1,13 +1,12 @@
-import {
-    AdvancedDynamicTexture,
-    Control,
-    Line,
-    TextBlock,
-} from "@babylonjs/gui";
+import { AdvancedDynamicTexture } from "@babylonjs/gui/2D/advancedDynamicTexture.js";
+import { Control } from "@babylonjs/gui/2D/controls/control.js";
+import { Line } from "@babylonjs/gui/2D/controls/line.js";
+import { TextBlock } from "@babylonjs/gui/2D/controls/textBlock.js";
 
 export class GameOver {
     _score: TextBlock;
-    private _advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+    private _advancedTexture =
+        AdvancedDynamicTexture.CreateFullscreenUI("myUI");
     private _titleFront: TextBlock;
     private _titleBack: TextBlock;
     private _line: Line;
@@ -18,10 +17,12 @@ export class GameOver {
         this._font = "Agency FB";
 
         this._start = new TextBlock("start");
-        this._start.text = "C L I C K    A N Y W H E R E    T O    P L A Y    A G A I N";
+        this._start.text =
+            "C L I C K    A N Y W H E R E    T O    P L A Y    A G A I N";
         this._start.color = "white";
         this._start.fontFamily = this._font;
-        this._start.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+        this._start.textHorizontalAlignment =
+            Control.HORIZONTAL_ALIGNMENT_CENTER;
         this._start.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
         this._start.fontSize = 30;
         this._advancedTexture.addControl(this._start);
@@ -31,8 +32,10 @@ export class GameOver {
         this._titleBack.color = "purple";
         this._titleBack.fontSize = 275;
         this._titleBack.fontFamily = this._font;
-        this._titleBack.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
-        this._titleBack.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+        this._titleBack.textVerticalAlignment =
+            Control.VERTICAL_ALIGNMENT_CENTER;
+        this._titleBack.textHorizontalAlignment =
+            Control.HORIZONTAL_ALIGNMENT_CENTER;
         this._titleBack.top = -220;
         this._titleBack.left = -10;
         this._advancedTexture.addControl(this._titleBack);
@@ -42,8 +45,10 @@ export class GameOver {
         this._titleFront.color = "white";
         this._titleFront.fontSize = 275;
         this._titleFront.fontFamily = this._font;
-        this._titleFront.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
-        this._titleFront.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+        this._titleFront.textVerticalAlignment =
+            Control.VERTICAL_ALIGNMENT_CENTER;
+        this._titleFront.textHorizontalAlignment =
+            Control.HORIZONTAL_ALIGNMENT_CENTER;
         this._titleFront.top = -230;
         this._titleBack.left = 10;
         this._advancedTexture.addControl(this._titleFront);
@@ -63,7 +68,8 @@ export class GameOver {
         this._score.fontFamily = this._font;
         this._score.color = "white";
         this._score.fontSize = 50;
-        this._score.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+        this._score.textHorizontalAlignment =
+            Control.HORIZONTAL_ALIGNMENT_CENTER;
         this._score.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
         this._score.left = 0;
         this._score.top = 150;

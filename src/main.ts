@@ -1,15 +1,18 @@
-import {
-    ArcRotateCamera,
-    Color4,
-    Engine,
-    HemisphericLight,
-    PointerEventTypes,
-    Scene,
-    Vector3,
-} from "@babylonjs/core";
-import { Menu } from "./menu";
-import { Game } from "./game";
-import { GameOver } from "./gameover";
+/// <reference types="vite/types/import-meta" />
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera.js";
+import { Color4 } from "@babylonjs/core/Maths/math.color.js";
+import { Engine } from "@babylonjs/core/Engines/engine.js";
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight.js";
+import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector.js";
+
+import { Menu } from "./menu.js";
+import { Game } from "./game.js";
+import { GameOver } from "./gameover.js";
+
+import "@babylonjs/core/Helpers/sceneHelpers.js";
+import "@babylonjs/core/Materials/standardMaterial.js";
 
 class App {
     private _scene: Scene;
@@ -23,7 +26,9 @@ class App {
 
     constructor() {
         // create canvas, scene (has gameboard), engine?
-        this._canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+        this._canvas = document.getElementById(
+            "renderCanvas",
+        ) as HTMLCanvasElement;
         this._engine = new Engine(this._canvas, true);
         this._scene = new Scene(this._engine);
         this._scene.clearColor = new Color4(0, 0, 0, 1);
@@ -39,10 +44,21 @@ class App {
 
     private createScene(scene: Scene) {
         // Camera changed
-        const camera = new ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 3.3, 18.4, new Vector3(0, 0, 0), scene);
+        const camera = new ArcRotateCamera(
+            "Camera",
+            -Math.PI / 2,
+            Math.PI / 3.3,
+            18.4,
+            new Vector3(0, 0, 0),
+            scene,
+        );
         camera.attachControl(this._canvas, true);
 
-        const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+        const light = new HemisphericLight(
+            "light",
+            new Vector3(0, 1, 0),
+            scene,
+        );
         light.intensity = 1;
 
         if (this._gameOver) {
@@ -88,16 +104,18 @@ class App {
     async start() {
         if (import.meta.env.DEV) {
             try {
+                await import("@babylonjs/core/Debug/debugLayer");
                 await import("@babylonjs/inspector");
                 // Hide/show the Inspector
-                window.addEventListener("keydown", (ev) => {
+                window.addEventListener("keydown", (evt) => {
                     // Ctrl+I
-                    if (ev.ctrlKey && ev.key === "I") {
+                    if (evt.ctrlKey && !evt.shiftKey && evt.key === "i") {
                         if (this._scene.debugLayer.isVisible()) {
                             this._scene.debugLayer.hide();
                         } else {
                             this._scene.debugLayer.show();
                         }
+                        evt.preventDefault();
                     }
                 });
             } catch (e: any) {
@@ -120,7 +138,7 @@ class App {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     const app = new App();
     app.start();
 });

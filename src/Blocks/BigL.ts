@@ -1,11 +1,10 @@
-import {
-    Color3,
-    Mesh,
-    Scene,
-    StandardMaterial,
-    Vector3,
-} from "@babylonjs/core";
-import { Block } from "./Block";
+import { Color3 } from "@babylonjs/core/Maths/math.color.js";
+import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial.js";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector.js";
+
+import { Block } from "./Block.js";
 
 /**
  * Big L-Block, 2 x 3,
@@ -51,7 +50,7 @@ export class BigL extends Block {
             this.parentCube.position,
             this._cube2.getAbsolutePosition(),
             this._cube3.getAbsolutePosition(),
-            this._cube4.getAbsolutePosition()
+            this._cube4.getAbsolutePosition(),
         ];
     }
 
@@ -65,15 +64,11 @@ export class BigL extends Block {
             this.parentCube.position,
             this._cube2.position,
             this._cube3.position,
-            this._cube4.position
+            this._cube4.position,
         ];
     }
 
     private setCubes() {
-        this.cubes = [
-            this._cube2,
-            this._cube3,
-            this._cube4
-        ];
+        this.cubes = [this._cube2, this._cube3, this._cube4];
     }
 }

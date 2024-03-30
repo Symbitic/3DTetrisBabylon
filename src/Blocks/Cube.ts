@@ -1,12 +1,14 @@
-import { Color3, Scene, StandardMaterial } from "@babylonjs/core";
-import { Block } from "./Block";
+import { Color3 } from "@babylonjs/core/Maths/math.color.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial.js";
+
+import { Block } from "./Block.js";
 
 /**
  * 1 x 1 Cube Block
  * drawn at height y = 6.5
  */
 export class Cube extends Block {
-
     constructor(scene: Scene) {
         super(1, scene); // 1 - size of pos array
         this.type = "cube";

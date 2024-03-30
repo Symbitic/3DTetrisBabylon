@@ -1,11 +1,9 @@
-import {
-    Color3,
-    Mesh,
-    MeshBuilder,
-    Scene,
-    Vector3,
-} from "@babylonjs/core";
-import { GridMaterial } from "@babylonjs/materials";
+import { Color3 } from "@babylonjs/core/Maths/math.color.js";
+import { GridMaterial } from "@babylonjs/materials/grid/gridMaterial.js";
+import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector.js";
 
 export class GameBoard {
     private _size: number;
@@ -29,9 +27,13 @@ export class GameBoard {
         groundGrid.backFaceCulling = false;
 
         // Size: must be odd number b/c of offset; use 5 or 7
-        const ground = MeshBuilder.CreateGround("ground", { width: this._size, height: this._size }, this._scene);
+        const ground = MeshBuilder.CreateGround(
+            "ground",
+            { width: this._size, height: this._size },
+            this._scene,
+        );
         ground.material = groundGrid;
-        ground.position.y = (this._size === 7) ? -6 : -5;
+        ground.position.y = this._size === 7 ? -6 : -5;
         this._groundlvl = ground.position.y + 0.5;
         this._ground = ground;
 
@@ -55,8 +57,12 @@ export class GameBoard {
 
     private createPlane(x: number, y: number, z: number, rotation: number) {
         // 12 if 7, 10 if 5 (default)
-        this._height = (this._size === 7) ? 12 : 10;
-        const plane = MeshBuilder.CreatePlane("plane", { height: this._height, width: this._size }, this._scene);
+        this._height = this._size === 7 ? 12 : 10;
+        const plane = MeshBuilder.CreatePlane(
+            "plane",
+            { height: this._height, width: this._size },
+            this._scene,
+        );
         plane.position.x = x;
         plane.position.y = y;
         plane.position.z = z;
@@ -116,7 +122,11 @@ export class GameBoard {
         // for odd size and even height, shifted 0.5 up y
 
         // Top, right, deep corner
-        const origin = new Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2));
+        const origin = new Vector3(
+            -Math.floor(this._size / 2),
+            this._height / 2 - 0.5,
+            Math.floor(this._size / 2),
+        );
 
         // y+=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
         const positions = new Array(this._size);
@@ -127,7 +137,7 @@ export class GameBoard {
             let ypos = origin.y;
 
             for (var y = 0; y < this._height; y++) {
-                positions[x][y] = new Array(this._size)
+                positions[x][y] = new Array(this._size);
                 var zpos = origin.z;
 
                 for (var z = 0; z < this._size; z++) {
@@ -154,7 +164,6 @@ export class GameBoard {
         for (let x = 0; x < this._size; x++) {
             for (let y = 0; y < this._height; y++) {
                 for (let z = 0; z < this._size; z++) {
-
                     for (let i = 0; i < blockpos.length; i++) {
                         inBounds = this.compare(blockpos[i], x, y, z);
                         if (inBounds) {
@@ -168,8 +177,11 @@ export class GameBoard {
 
         let tracker2 = 0;
         for (let i = 0; i < blockpos.length; i++) {
-            if (Math.abs(blockpos[i].x) > Math.floor(this._size / 2) ||
-                Math.abs(blockpos[i].y) > ((this._height / 2) - 0.5) || Math.abs(blockpos[i].z) > Math.floor(this._size / 2)) {
+            if (
+                Math.abs(blockpos[i].x) > Math.floor(this._size / 2) ||
+                Math.abs(blockpos[i].y) > this._height / 2 - 0.5 ||
+                Math.abs(blockpos[i].z) > Math.floor(this._size / 2)
+            ) {
                 tracker2++;
             }
         }
@@ -232,12 +244,14 @@ export class GameBoard {
         for (let x = 0; x < this._size; x++) {
             for (let y = 0; y < this._height; y++) {
                 for (let z = 0; z < this._size; z++) {
-
                     // Current and potential arrays have same length - they store positions of same block
                     for (let i = 0; i < potential.length; i++) {
                         // Find position in potential non-overlapping w/current
                         // don't check spaces that block currently occupies, only check potential positions that block doesn't occupy.
-                        if (this.compareMultiple(current, x, y, z) === false && this.compare(potential[i], x, y, z) === true) {
+                        if (
+                            this.compareMultiple(current, x, y, z) === false &&
+                            this.compare(potential[i], x, y, z) === true
+                        ) {
                             // Position array el don't match any of current's els AND pos arr's el = potential el
                             if (this.spaces[x][y][z] === true) {
                                 return true;
@@ -261,17 +275,22 @@ export class GameBoard {
         for (let x = 0; x < this._size; x++) {
             for (let y = 0; y < this._height; y++) {
                 for (let z = 0; z < this._size; z++) {
-
                     // Iterate through array of positions (active/landed cubes)
                     for (let i = 0; i < position.length; i++) {
                         // IF ACTIVE BLOCK -> SET POSITIONS TO NULL
-                        if (active && this.compare(position[i], x, y, z) === true) {
+                        if (
+                            active &&
+                            this.compare(position[i], x, y, z) === true
+                        ) {
                             // Null used so that whenever active block moves, doesnt reset landed trues
                             this._spaces[x][y][z] = null;
                         }
 
                         // IF LANDED -> SET POSITIONS TO TRUE
-                        if (landed && this.compare(position[i], x, y, z) === true) {
+                        if (
+                            landed &&
+                            this.compare(position[i], x, y, z) === true
+                        ) {
                             // Even if space was null before (block active then landed)
                             this._spaces[x][y][z] = true;
                         }
@@ -281,12 +300,20 @@ export class GameBoard {
                     // if not, each position isnt occupied, so space can be reset to false
 
                     // If not equal to any positions of block
-                    if (active && this._spaces[x][y][z] === null && this.compareMultiple(position, x, y, z) === false) {
+                    if (
+                        active &&
+                        this._spaces[x][y][z] === null &&
+                        this.compareMultiple(position, x, y, z) === false
+                    ) {
                         // Reset space that was previously null - occupied by active block
                         this._spaces[x][y][z] = false;
                     }
 
-                    if (landed && this._spaces[x][y][z] === true && this.compareMultiple(position, x, y, z) === false) {
+                    if (
+                        landed &&
+                        this._spaces[x][y][z] === true &&
+                        this.compareMultiple(position, x, y, z) === false
+                    ) {
                         this._spaces[x][y][z] = false;
                     }
 
@@ -300,13 +327,19 @@ export class GameBoard {
     // is position of block same as in positions array?
     compare(position: Vector3, x: number, y: number, z: number) {
         const val: any = this._positions;
-        const match = val[x][y][z].x === position.x
-            && val[x][y][z].y === position.y
-            && val[x][y][z].z === position.z;
+        const match =
+            val[x][y][z].x === position.x &&
+            val[x][y][z].y === position.y &&
+            val[x][y][z].z === position.z;
         return match;
     }
 
-    private compareMultiple(position: Vector3[], x: number, y: number, z: number) {
+    private compareMultiple(
+        position: Vector3[],
+        x: number,
+        y: number,
+        z: number,
+    ) {
         let match: boolean;
         let tracker = 0;
         // If match ever equal true, return true (at least once=true)

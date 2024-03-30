@@ -1,15 +1,14 @@
-import {
-    Color3,
-    Mesh,
-    Scene,
-    StandardMaterial,
-} from "@babylonjs/core";
-import { Block } from "./Block";
+import { Color3 } from "@babylonjs/core/Maths/math.color.js";
+import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial.js";
+
+import { Block } from "./Block.js";
 
 /**
-* 1 x 3 Short Block
-* drawn upright, top to bottom, y = 6.5
-*/
+ * 1 x 3 Short Block
+ * drawn upright, top to bottom, y = 6.5
+ */
 export class ShortTower extends Block {
     private _cube2!: Mesh; // Top cube
     private _cube3!: Mesh; // Bottom cube
@@ -44,7 +43,7 @@ export class ShortTower extends Block {
         return [
             this.parentCube.position,
             this._cube2.getAbsolutePosition(),
-            this._cube3.getAbsolutePosition()
+            this._cube3.getAbsolutePosition(),
         ];
     }
 
@@ -58,11 +57,11 @@ export class ShortTower extends Block {
         this.positions = [
             this.parentCube.position,
             this._cube2.position,
-            this._cube3.position
+            this._cube3.position,
         ];
     }
 
     private setCubes() {
-        this.cubes = [this._cube2, this._cube3]
+        this.cubes = [this._cube2, this._cube3];
     }
 }

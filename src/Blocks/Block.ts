@@ -1,12 +1,10 @@
-import {
-    Axis,
-    Color4,
-    Mesh,
-    MeshBuilder,
-    Scene,
-    Space,
-    Vector3,
-} from "@babylonjs/core";
+import { Axis } from "@babylonjs/core/Maths/math.axis.js";
+import { Color4 } from "@babylonjs/core/Maths/math.color.js";
+import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder.js";
+import { Scene } from "@babylonjs/core/scene.js";
+import { Space } from "@babylonjs/core/Maths/math.axis.js";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector.js";
 
 export class Block {
     positions: Vector3[];
