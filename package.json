@@ -1,12 +1,12 @@
 {
-  "name": "3d-tetris-babylon",
+  "name": "3d-tetris",
   "private": true,
   "version": "1.0.0",
   "description": "3D Tetris by Anna Jo and RJ",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --base /3DTetrisBabylon/",
+    "build": "tsc && vite build --base /3d-tetris/",
     "preview": "vite preview"
   },
   "dependencies": {
